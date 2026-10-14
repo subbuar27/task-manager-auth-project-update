@@ -1,0 +1,7 @@
+START HERE
+1. Read README.md first.
+2. Configure backend/.env from backend/.env.example.
+3. In terminal 1: cd backend, npm install, npx prisma generate, npx prisma migrate dev --name init, npm run dev.
+4. In terminal 2: cd frontend, npm install, npm run dev.
+5. Open http://localhost:3000/register.
+Keep both terminal windows running.
