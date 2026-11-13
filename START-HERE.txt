@@ -1,0 +1,51 @@
+TASK MANAGER - FEATURES C TO J
+
+This package is an extension of your existing project. Your original registration/login
+screens, API helper, Fastify authentication endpoints and Prisma User/Task models are kept.
+The dashboard is upgraded with protected access, a TanStack Table, validated create/edit
+forms, delete confirmation, TanStack Query cache refresh, and React Context user state.
+
+IMPORTANT: This project uses Fastify on port 4000 and Next.js on port 3000.
+
+1. Extract this ZIP into a NEW folder first (keep your original as a backup).
+2. Configure backend/.env using backend/.env.example.
+3. Configure frontend/.env.local using frontend/.env.local.example.
+4. Install frontend dependencies (includes @tanstack/react-table):
+      cd frontend
+      npm install
+5. Install backend dependencies:
+      cd ../backend
+      npm install
+6. Apply/generate Prisma:
+      npx prisma generate
+      npx prisma migrate dev --name add_task_manager_features
+   If the schema is already in sync and Prisma says no changes, that is okay.
+7. Start backend in one terminal:
+      cd backend
+      npm run dev
+8. Start frontend in a second terminal:
+      cd frontend
+      npm run dev
+9. Open http://localhost:3000/login
+
+Environment:
+- backend/.env: DATABASE_URL, JWT_SECRET (32+ characters), PORT=4000,
+  FRONTEND_ORIGIN=http://localhost:3000, COOKIE_SECURE=false for local HTTP.
+- frontend/.env.local: NEXT_PUBLIC_API_URL=http://localhost:4000
+
+Security:
+- Task APIs require the JWT cookie.
+- Task reads/writes/deletes are scoped to request.user.sub.
+- Never accept userId from the frontend; the backend takes it from the verified JWT.
+- Do not commit .env or .env.local files to GitHub.
+
+Testing ownership:
+1. Register/login as User A and create a task.
+2. Logout, register/login as User B and confirm User A's task is not listed.
+3. Try User A's task ID against GET/PATCH/DELETE /api/tasks/:id while logged in as User B.
+   The API should return 404 and leave User A's task unchanged.
+4. Open /dashboard in a private/incognito window without logging in. It should redirect to /login.
+5. Log in, create/edit/delete a task and verify the table refreshes.
+
+The browser's redirect is a user-experience guard; the Fastify preHandler is the
+actual security boundary. Do not remove the backend authorization checks.
